@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Reminder",
+    "version": "1.0",
+    "action": {
+        "default_popup": "index.html"
+    },
+    "permissions": [
+        "alarms", "storage", "notifications"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "web_accessible_resources": [
+    {
+      "resources": ["alarm.mp3", "audio.html"],
+      "matches": ["<all_urls>"]
+    } ]
+}

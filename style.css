@@ -1,0 +1,117 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    width: 300px;
+    background: #333;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  h1, h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #ccc;
+    text-align: left;
+    visibility: hidden;
+  }
+  
+  input[type="text"], input[type="datetime-local"] {
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 60%;
+    background-color: #5b5858;
+    color: #ccc;
+    border: 0;
+    outline: 0;
+    font-size: 15px;
+    border-radius: 5pc;
+  }
+  input[type="datetime-local"] {
+    margin: 0;
+  }
+  button {
+    padding: 8px 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    background-color: #151313;
+    border: 0;
+    outline: 0;
+    color: #ccc;
+    font-size: 15px;
+    border-radius: 5pc;
+  }
+  
+  .task-input-container {
+    display: flex;
+    width: 100%;
+  }
+  
+  #add-task{
+    margin-left: 10px;
+  }
+  
+  #task-list {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    
+  }
+  
+  #task-list li {
+    width: 90%;
+    align-items: center;
+    background-color: rgba(79, 88, 79, 0.356);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    box-sizing: content-box;
+    padding: 8px 10px;
+    font-size: 22px;
+    color: #ccc;
+    border-radius:10px;
+  box-shadow: 1px 1px 1px 1px #161616;
+  font-weight: 600;
+  }
+  #displayContainer{
+    width: 90%;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #displayContainer li{
+     width: 100%;
+    align-items: center;
+    background-color: rgba(79, 88, 79, 0.356);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    box-sizing: content-box;
+    padding: 8px 10px;
+    font-size: 22px;
+    color: #ccc;
+    border-radius:10px;
+  box-shadow: 1px 1px 1px 1px #161616;
+  font-weight: 600;
+  }
+  #displayContainer button{
+    background-color: rgb(191, 69, 31);
+    /* background-color: rgb(21, 104, 21); */
+    box-shadow: 1px 1px 1px 1px #000;
+    font-size: 16px;
+    padding: 8px;
+    border: 0;
+    outline: 0;
+    border-radius:10px ;
+    margin: 0;
+    font-weight: 600;
+  }
+.visible{
+  visibility: visible !important;
+}
