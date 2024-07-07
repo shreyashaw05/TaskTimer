@@ -2,18 +2,29 @@
     "manifest_version": 3,
     "name": "Reminder",
     "version": "1.0",
-    "action": {
-        "default_popup": "index.html"
-    },
     "permissions": [
-        "alarms", "storage", "notifications"
+        "alarms",
+        "storage",
+        "notifications",
+        "activeTab",
+        "tabs"
     ],
     "background": {
         "service_worker": "background.js"
     },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "action": {
+        "default_popup": "index.html"
+    },
     "web_accessible_resources": [
-    {
-      "resources": ["alarm.mp3", "audio.html"],
-      "matches": ["<all_urls>"]
-    } ]
+        {
+            "resources": ["alarm.mp3", "audio.html"],
+            "matches": ["<all_urls>"]
+        }
+    ]
 }

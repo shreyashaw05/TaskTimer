@@ -46,93 +46,62 @@ addTaskElement.addEventListener("click", function () {
             li.appendChild(dateTimeInput);
             taskListDiv.appendChild(li); // Append only the last task  
 
-            // Storing locally, getting the old value and appending to it.
-            if (localStorage.getItem('tasklist') == null)
-                localStorage.setItem('tasklist', JSON.stringify(taskList));
-
-            var old_data = JSON.parse(localStorage.getItem('tasklist'));
-            old_data.push(task);
-            localStorage.setItem('tasklist', JSON.stringify(old_data))
+        
+            chrome.storage.sync.get('taskList', function(result) {
+                console.log(typeof result.taskList);
+                var old_data = result.taskList ? JSON.parse(result.taskList) : [];
+                console.log(taskList);
+                console.log(Array.isArray( old_data));
+                old_data.push(task);
+                
+                chrome.storage.sync.set({'taskList': JSON.stringify(old_data)}, function() {
+                    console.log('Task list updated.');
+                });
+            });
         }
 });
 var tasks;
 
 document.addEventListener("DOMContentLoaded", function() {
-    var storedTaskList = localStorage.getItem('tasklist');
+    chrome.storage.sync.get('taskList', function(result) {
+        var storedTaskList = result.taskList;
+         console.log(storedTaskList)
+        if (storedTaskList) {
+            document.getElementById("headPrev").className="visible";
+            tasks = JSON.parse(storedTaskList); 
+            console.log(tasks)
+        } else {
+            tasks = []; 
+        }
+        tasks.forEach(function(task) {
+            var li = document.createElement("li");
+            li.textContent = task;
+            li.id= `alarm${task}`;
 
-    if (storedTaskList) {
-        document.getElementById("headPrev").className="visible";
-        tasks = JSON.parse(storedTaskList); 
-        console.log(tasks)
-    } else {
-        tasks = []; 
-    }
-    tasks.forEach(function(task) {
-        var li = document.createElement("li");
-        li.textContent = task;
-        li.id= `alarm${task}`;
-
-        var deleteButton = document.createElement("button");
-        deleteButton.textContent = "Delete";
-        deleteButton.addEventListener("click", function() {
-            var index = tasks.indexOf(task);
-            if (index > -1) {
-                tasks.splice(index, 1);
-                localStorage.setItem('tasklist', JSON.stringify(tasks));
-                li.remove();
-            }
-            chrome.runtime.sendMessage({
-                action: "deleteReminder",
-                delete:task
-            })
-            console.log(task)
-        });
-        
-        li.appendChild(deleteButton);
-        displayContent.appendChild(li);
-      prevTaskList=  Array.from(displayContent.childNodes);  
-      console.log(prevTaskList[prevTaskList.length-1].id)
-    });
-
-    chrome.runtime.onMessage.addListener( function(message,sender,sendResponse){
-        console.log(`${message.task} completed` )
-        if(message.action=="taskCompleted"){
-            console.log(prevTaskList.id)
-        var index = prevTaskList.findIndex(item => item.id === message.task);
-        console.log(index, message.task);
-        if (index !== -1) {
+            var deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.addEventListener("click", function() {
+                var index = tasks.indexOf(task);
+                if (index > -1) {
+                    tasks.splice(index, 1);
+                    chrome.storage.sync.set({'taskList': JSON.stringify(tasks)}, function() {
+                        console.log('Task list updated.');
+                    });
+                    li.remove();
+                }
+                chrome.runtime.sendMessage({
+                    action: "deleteReminder",
+                    delete:task
+                })
+                console.log(task)
+            });
             
-            var taskElement = prevTaskList[index];
-            console.log(taskElement)
-            taskElement.style.color = "rgb(21, 104, 21)";
-            taskElement.lastChild.innerText = "Done";
-            taskElement.lastChild.style.backgroundColor = "rgb(21, 104, 21)";
-
-            if (index > -1) {
-                tasks.splice(index, 1);
-                localStorage.setItem('tasklist', JSON.stringify(tasks));
-            }
-            sendResponse("Yes, Marked.");
-        }
-        }
-    })
+            li.appendChild(deleteButton);
+            displayContent.appendChild(li);
+        });
+    });
 });
-var audio = new Audio("alarm.mp3");
-audio.load();
-// Play alarm tone.
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
- 
-    if (request.action === 'playAlarm') {
-      console.log("play Audio");
-      audio.currentTime = 0;
-      audio.play();
-    }
-    if (request.action === 'stopAlarm') {
-      console.log("stop alarm");
-      audio.pause();
-      audio.currentTime = 0;
-    }
-  });
+
 
 // To disable the previous dates
 function currentDateTime() {
