@@ -14,7 +14,10 @@ var headNew= document.getElementById("headNew");
 addTaskElement.addEventListener("click", function () {
 
     if (newTaskElement.value !== "") 
+    {
         taskList.push(newTaskElement.value);
+        newTaskElement.value = ""; // Clear the input field
+    }
     else 
         alert("Cannot be empty.")
         // Assuming taskList is not empty and taskListDiv is already defined
